@@ -201,7 +201,7 @@ class HTTPClient(object):
         if args:
             sock.sendall(body)
 
-    def GET(self, url, args=None):
+    def GET(self, url, args=None, printable=False):
         """Basic GET request.
         Parameters:
             url -> A string of the resource. ie. http://google.ca/hello_world
@@ -222,6 +222,10 @@ class HTTPClient(object):
         # Receive everything from the socket
         response = self.recvall(sock)
 
+        # User needs to see in stdout
+        if printable:
+            print response
+
         # Make sure the socket is closed.
         sock.close()
 
@@ -230,7 +234,7 @@ class HTTPClient(object):
 
         return HTTPRequest(self.response_code, self.body)
 
-    def POST(self, url, args=None):
+    def POST(self, url, args=None, printable=False):
         """Basic POST request.
         Parameters:
             url -> A string of the resource. ie. http://google.ca/hello_world
@@ -251,6 +255,10 @@ class HTTPClient(object):
         # Receive everything from the socket
         response = self.recvall(sock)
 
+        # User needs to see in stdout
+        if printable:
+            print response
+
         # Make sure the socket is closed.
         sock.close()
 
@@ -262,9 +270,9 @@ class HTTPClient(object):
     def command(self, url, command="GET", args=None):
         # Additional args as required after the {GET/POST URL}
         if command == "POST":
-            return self.POST(url, args)
+            return self.POST(url, args, printable=True)
         else:
-            return self.GET(url, args)
+            return self.GET(url, args, printable=True)
 
 if __name__ == "__main__":
     client = HTTPClient()
